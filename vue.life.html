@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="out">
+        <h2>生命周期</h2>
+        <p id="val">{{ title }}</p>
+        <button @click="top">按钮</button>
+    </div>
+
+    <script>
+        var out = new Vue({
+            el:'#out',
+            data:{
+                title:'hello word',
+            },
+            methods:{
+                top(){
+                    this.title="hi"
+                }
+            },
+            beforeCreate(){
+                //不能获得实例化data里的值
+                //页面加载出来就会执行
+                console.log(this.title)
+                console.log('创建之前')
+                //页面没加载出来，可以写加载的loading图
+            },
+            created(){
+                console.log(this.title)
+                console.log('创建之后')
+            },
+            beforeMount(){
+                //把当前实例化的Vue挂载到绑定的DOM元素上
+                //this.$el是获取当前实例化内的所有DOM节点
+                //此时DOM中的变量没有被渲染
+                //页面加载出来就会执行
+                console.log(this.$el)
+                console.log('挂载之前')
+            },
+            mounted(){
+                //此时DOM内的变量已经被渲染
+                console.log(this.$el)
+                console.log('挂载之后') 
+            },
+            beforeUpdate(){
+                //数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁之前。
+                //你可以在这个钩子中进一步地更改状态，
+                //这不会触发附加的重渲染过程。
+                //改变的是DOM元素里的数据变更
+                //data里的数据变更不会触发
+                //页面加载出来不会执行，当数据变更才会执行
+                console.log(document.querySelector('#val').innerHTML)
+                console.log('更新之前')
+                //该钩子在服务器端渲染期间不被调用。
+            },
+            updated(){
+                //此时都DOM已经更新
+                //避免在此期间更改状态，因为这可能会导致更新无限循环。
+                console.log(document.querySelector('#val').innerHTML)
+                console.log('更新之后'); 
+                //this.$destroy()//通过该方法摧毁整个实例化里的事件与数据变更
+                //然后执行摧毁前的生命周期 函数
+            },
+            beforeDestroy(){
+                //实例销毁之前调用。在这一步，实例仍然完全可用。
+                console.log('催毁之前'); 
+            },
+            destroy(){
+                //Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定
+                 // 所有的事件监听器会被移除，所有的子实例也会被销毁。
+                console.log('摧毁之后')
+            }
+        })
+    </script>
+</body>
+</html>
